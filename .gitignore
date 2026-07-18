@@ -1,0 +1,12 @@
+# Backup files
+*.bkp
+*.backup
+*~
+
+# Moonraker database and logs
+*.db
+*.log
+
+# Temporary files
+*.tmp
+.DS_Store
