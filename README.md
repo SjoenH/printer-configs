@@ -36,6 +36,36 @@ Choose your installation method:
 
 ---
 
+## Why Klipper?
+
+### Klipper vs Stock Marlin
+
+**Why we chose Klipper for this setup:**
+
+#### Performance Advantages ✅
+- **2-3x faster prints** - 7000 mm/s² acceleration vs 3000 stock
+- **Input shaping** - Eliminates ringing/ghosting at high speeds
+- **Smoother motion** - 32-bit math provides better motion planning
+- **Better print quality** - Pressure advance, resonance compensation
+
+#### Workflow Benefits ✅
+- **Web interface** - Fluidd provides modern UI vs clunky LCD menus
+- **Live config changes** - Edit settings without recompiling/reflashing
+- **Remote access** - Control printer from anywhere
+- **Powerful macros** - Python-like scripting for automation
+
+#### Trade-offs ⚖️
+- **Requires host computer** - Raspberry Pi or always-on server needed
+- **More complex setup** - Initial configuration takes 2-4 hours
+- **Two systems to maintain** - Printer MCU + host computer
+- **USB power conflicts** - Need to power printer first (see troubleshooting)
+
+**Bottom line:** Klipper is worth it for the performance and features, but requires technical comfort with Linux.
+
+**See full comparison:** [Klipper vs Marlin detailed breakdown](#klipper-vs-marlin-detailed-comparison) (bottom of page)
+
+---
+
 ## Raspberry Pi Setup
 
 ### Method 1: Pre-built Image (Easiest - Recommended)
@@ -414,6 +444,205 @@ git pull
 - Multi-day printing while away requires significant safety infrastructure
 - Always have working smoke detectors and fire extinguisher
 - Check your insurance policy regarding unattended manufacturing equipment
+
+---
+
+## Klipper vs Marlin Detailed Comparison
+
+### Performance
+
+| Feature | Klipper (This Setup) | Stock Marlin |
+|---------|---------------------|--------------|
+| Max Acceleration | 7000 mm/s² | 3000 mm/s² |
+| Input Shaping | ✅ Built-in (MZV @ 40Hz) | ❌ Not available |
+| Pressure Advance | ✅ Superior algorithm | ⚠️ Basic Linear Advance |
+| Motion Planning | 32-bit floating point | 8/32-bit integer (board dependent) |
+| Print Speed | Up to 300 mm/s smoothly | ~100-150 mm/s practical limit |
+| Quality at Speed | Excellent with tuning | Good at lower speeds |
+
+### Configuration & Workflow
+
+| Aspect | Klipper | Marlin |
+|--------|---------|--------|
+| **Config Changes** | Edit text file → restart (30 sec) | Edit code → compile → flash (5-10 min) |
+| **Interface** | Modern web UI (Fluidd/Mainsail) | LCD screen with button navigation |
+| **Remote Access** | Built-in via web browser | Requires OctoPrint (+Pi anyway) |
+| **Live Tuning** | Adjust values during print | Must stop, reflash, restart |
+| **Macro Language** | Jinja2 templates (powerful) | G-code only (limited) |
+| **Bed Mesh** | Advanced algorithms, unlimited points | Basic, limited by RAM |
+
+### Features Comparison
+
+**Klipper Advantages:**
+- ✅ Input shaping (eliminates ringing)
+- ✅ Resonance testing & auto-tuning
+- ✅ Multi-MCU support (add toolboards easily)
+- ✅ Pressure advance (better than Linear Advance)
+- ✅ Advanced kinematics (easy to switch printer types)
+- ✅ Real-time graphs & monitoring
+- ✅ G-code preview with toolpath visualization
+- ✅ Automatic firmware updates via web UI
+- ✅ Temperature curves & PID auto-tune
+- ✅ Flexible pin configuration
+
+**Marlin Advantages:**
+- ✅ Standalone operation (no host needed)
+- ✅ Print from SD card without network
+- ✅ Full LCD control (all features accessible)
+- ✅ Single point of failure (just the printer)
+- ✅ Works offline always
+- ✅ Simpler troubleshooting
+- ✅ Huge pre-made config library
+- ✅ No USB power conflicts
+
+### System Architecture
+
+**Klipper:**
+```
+Internet → Host Computer (Pi/Docker) → Printer MCU → Hardware
+           ↑                           ↑
+        Web Browser                USB Connection
+        (Fluidd UI)
+```
+
+**Marlin:**
+```
+SD Card → Printer MCU → Hardware
+          ↑
+    LCD Screen Control
+```
+
+### Setup Complexity
+
+**Klipper Initial Setup:**
+1. Install host software (Pi/Docker) - 30-60 min
+2. Compile & flash MCU firmware - 15-30 min
+3. Configure printer.cfg - 1-2 hours
+4. Calibration & tuning - 1-2 hours
+**Total: 3-5 hours**
+
+**Marlin Initial Setup:**
+1. Download pre-configured firmware - 5 min
+2. Flash to printer - 5 min
+3. Basic calibration - 30 min
+**Total: 40 minutes**
+
+### Cost Comparison
+
+| Component | Klipper | Marlin |
+|-----------|---------|--------|
+| **Printer** | €200-300 (Ender 3 V2) | €200-300 (Ender 3 V2) |
+| **Host Computer** | €40-100 (Raspberry Pi) | €0 (not needed) |
+| **Power Consumption** | +5-10W (host 24/7) | 0W extra |
+| **Networking** | Required (WiFi/Ethernet) | Optional |
+| **Total Setup Cost** | +€40-100 | €0 |
+
+### Real-World Speed Comparison
+
+**Benchy (3DBenchy test print):**
+- **Stock Marlin:** 3-4 hours (conservative speeds)
+- **Klipper (tuned):** 1.5-2 hours (high speeds with input shaping)
+- **Klipper (speed profile):** 45-60 min (pushing limits)
+
+**Quality:**
+- Marlin at slow speeds: Excellent
+- Klipper at medium speeds: Excellent  
+- Klipper at high speeds: Good (with proper tuning)
+
+### Reliability & Maintenance
+
+**Klipper:**
+- ⚠️ Two systems to maintain (host + printer)
+- ⚠️ USB connection can be finicky (power conflicts)
+- ⚠️ Network issues affect access (but print continues)
+- ⚠️ Host failure = printer unusable until fixed
+- ✅ Easy software updates via web UI
+- ✅ Config backups are simple text files
+
+**Marlin:**
+- ✅ Single, self-contained system
+- ✅ Very reliable once configured
+- ✅ No network dependencies
+- ✅ Works even if everything else fails
+- ⚠️ Updates require reflashing
+- ⚠️ Config backup = save compiled .hex file
+
+### Use Cases
+
+**Choose Klipper if you:**
+- Want maximum print speed and quality
+- Are comfortable with Linux/command line
+- Have a Raspberry Pi or server running 24/7
+- Print frequently and want remote monitoring
+- Like tinkering and optimization
+- Need advanced features (multi-extruder, custom kinematics)
+- Want to run multiple printers from one host
+
+**Choose Marlin if you:**
+- Want simple, plug-and-play printing
+- Don't want to manage a separate computer
+- Print occasionally/casually
+- Prefer standalone operation
+- Need to print in locations without network
+- Are new to 3D printing
+- Value simplicity over features
+
+### Migration Path
+
+**Marlin → Klipper (What we did):**
+1. Keep Marlin as backup (save firmware)
+2. Set up Klipper on separate host
+3. Test with simple prints
+4. Gradually increase speeds as you tune
+5. Can revert to Marlin in 5 minutes if needed
+
+**Klipper → Marlin (If needed):**
+1. Download latest Marlin for your board
+2. Flash via SD card or USB
+3. Configure via LCD or recompile
+4. Lose: Speed, web UI, remote access
+5. Gain: Standalone operation, simplicity
+
+### Our Experience
+
+**Why we use Klipper on this Ender 3 V2:**
+
+✅ **Print times cut in half** - 7000 mm/s² acceleration vs 3000 stock
+✅ **Better quality** - Input shaping eliminates ringing at high speeds
+✅ **Remote monitoring** - Check prints from anywhere via Fluidd
+✅ **Easy tuning** - Live config changes without reflashing
+✅ **Future-proof** - Easy to add upgrades (BLTouch, toolboard, etc.)
+
+**Trade-offs we accepted:**
+
+⚠️ **More complex setup** - Initial 3-4 hour investment in configuration
+⚠️ **USB power issues** - Need to power printer on first (documented)
+⚠️ **Host dependency** - Running Prind in Docker on home server
+⚠️ **Two systems to maintain** - But both are stable once configured
+
+**Verdict:** Worth it for the performance gains, but not for everyone.
+
+### Common Myths
+
+**"Klipper is only for advanced users"**
+- Partly true: Setup requires technical knowledge
+- False: Once configured, operation is actually easier than Marlin
+- FluiddPi/MainsailOS make installation much simpler
+
+**"Marlin is outdated"**
+- False: Marlin is actively developed and very capable
+- True: Klipper has architectural advantages for performance
+- Both are excellent, just different philosophies
+
+**"Klipper is unreliable"**
+- False: Very stable when properly configured
+- True: More points of failure (host + USB + network)
+- Mitigation: Proper setup eliminates most issues
+
+**"You need a Pi for Klipper"**
+- False: Can run on any Linux computer (we use Docker)
+- True: Pi is most common and well-documented
+- Alternatives: Old laptop, NAS, server, even Android
 
 ---
 
