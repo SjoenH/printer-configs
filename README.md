@@ -8,6 +8,7 @@ Choose your installation method:
 - **[Raspberry Pi Setup](#raspberry-pi-setup)** - Recommended for dedicated printer host
 - **[Prind (Docker) Setup](#prind-docker-setup)** - For running on any Linux machine with Docker
 - **[Deployment](#deployment)** - Deploy configs to existing installation
+- **[Fire-Safety Enclosure](FIRE-SAFETY-ENCLOSURE.md)** - ⚠️ **For multi-day unattended printing**
 
 ---
 
@@ -389,6 +390,30 @@ git pull
 - **Power**: 24V PSU
   - Bed: 24V 235W
   - Hotend: 24V 40W
+
+---
+
+## Safety & Advanced Topics
+
+### Multi-Day Unattended Printing
+
+**⚠️ See [FIRE-SAFETY-ENCLOSURE.md](FIRE-SAFETY-ENCLOSURE.md)** for comprehensive guide on:
+- Building a fire-resistant printer enclosure
+- Remote monitoring with cameras
+- Automatic power cutoff with Matter/Zigbee smart plugs
+- Smoke detection and alerting
+- Home Assistant automations
+- Risk mitigation strategies
+
+**Cost:** €410-560 | **Build Time:** 1-2 days | **Skill Level:** Intermediate
+
+### Important Safety Notes
+
+- **Never leave printer unattended without proper safety measures**
+- Overnight printing while home is generally safe with basic precautions
+- Multi-day printing while away requires significant safety infrastructure
+- Always have working smoke detectors and fire extinguisher
+- Check your insurance policy regarding unattended manufacturing equipment
 
 ---
 
