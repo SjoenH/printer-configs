@@ -17,20 +17,52 @@ This enclosure design prioritizes:
 
 ## Bill of Materials (IKEA + Hardware Store)
 
-### Structure (IKEA)
-- **HYLLIS Shelf Unit** (80x27x140cm) - €15
-  - Steel frame, stable base
-  - Multiple shelf levels
-  - Good airflow
+### Ender 3 V2 Dimensions (with clearance needed)
+- **Printer footprint:** 44cm (W) x 41cm (D) x 46.5cm (H)
+- **Minimum enclosure:** 60cm (W) x 50cm (D) x 70cm (H)
+- **Recommended enclosure:** 80cm (W) x 60cm (D) x 100cm (H)
+
+### Structure (IKEA Options)
+
+**Option 1: OMAR Shelf Unit (Recommended)** - €40
+- Dimensions: 92cm (W) x 36cm (D) x 181cm (H)
+- Galvanized steel (fire-resistant)
+- Adjustable shelves
+- Stable for mounting panels
+- **Issue:** 36cm depth is tight, printer fits but limited clearance
+
+**Option 2: BROR Shelf Unit (Best fit)** - €70
+- Dimensions: 85cm (W) x 55cm (D) x 190cm (H)  
+- Heavy-duty steel frame
+- 55cm depth - plenty of room! ✅
+- Can support heavy cement board panels
+- More expensive but proper dimensions
+
+**Option 3: Custom Frame (Most flexible)** - €50-80
+- Build frame from:
+  - **Aluminum extrusion** (2020 or 3030 profile) - AliExpress/local supplier
+  - **Steel angle iron** - Hardware store
+- Custom size: 80cm x 60cm x 100cm
+- More work but perfect fit
+
+**Option 4: HYLLIS (NOT RECOMMENDED)** - €15
+- Dimensions: 80cm (W) x 27cm (D) x 140cm (H)
+- ❌ **Only 27cm depth - TOO SHALLOW for Ender 3 V2**
+- Printer base is 41cm deep, won't fit!
+
+**Recommendation: Use BROR for proper fit, or OMAR if budget is tight (but tight fit)**
 
 ### Fire-Resistant Panels
+
+**Panel Dimensions (for 80x60x100cm enclosure):**
+
 - **Cement Board** (HardieBacker or similar) - 6mm thick
-  - Front: 80cm x 140cm (with cutout for door/window)
-  - Back: 80cm x 140cm
-  - Sides: 27cm x 140cm (x2)
-  - Top: 80cm x 27cm
-  - Bottom: Fire-resistant mat/concrete paver
-  - Cost: ~€50-80
+  - Back: 80cm x 100cm
+  - Sides: 60cm x 100cm (x2)
+  - Top: 80cm x 60cm
+  - Front: 80cm x 100cm (with cutout for door/window)
+  - Bottom: Concrete paver 80cm x 60cm (or double cement board)
+  - Cost: ~€80-120
 
 **Alternative:** Sheet metal (galvanized steel, 1mm thick) - lighter but more expensive
 
@@ -134,53 +166,74 @@ This enclosure design prioritizes:
 - **Aluminum tape** (heat-resistant) - €8
 - **Wire mesh** (steel, for vent guards) - €10
 
-**Total Cost: €410-560** (depending on material choices)
-- Add €60 if you need DIRIGERA Hub
-- Subtract €60 if you already have Matter/Zigbee hub or Home Assistant
+**Total Cost Estimate:**
+
+| Option | Frame | Panels | Electronics | Total |
+|--------|-------|--------|-------------|-------|
+| **Budget (OMAR)** | €40 | €80 | €250 | €370-490 |
+| **Recommended (BROR)** | €70 | €100 | €250 | €420-540 |
+| **Custom Frame** | €60 | €100 | €250 | €410-530 |
+
+Add €60 if you need DIRIGERA Hub (subtract if you already have Matter/Zigbee hub)
 
 ---
 
 ## Build Instructions
 
+**These instructions use BROR shelf (85x55cm) as the base. Adjust dimensions if using OMAR (92x36cm) or custom frame.**
+
 ### Phase 1: Base Structure
 
-1. **Assemble HYLLIS shelf** per IKEA instructions
+1. **Assemble IKEA BROR shelf** per IKEA instructions
+   - Use only the bottom 100cm height (don't need full 190cm)
+   - Or cut frame to desired height if comfortable with metal cutting
 
 2. **Prepare base level**
-   - Remove lowest shelf
-   - Place concrete paver or fire brick as base (80x27cm)
+   - Remove lowest shelf or use as mounting surface
+   - Place concrete paver or fire brick as base (80cm x 60cm)
    - Alternative: Double layer of cement board
+   - Ensure base is level and stable
 
 3. **Position printer**
-   - Center printer on base
-   - Leave 10cm clearance on all sides
+   - Center printer on base (Ender 3 V2: 44x41cm footprint)
+   - Leave 10-15cm clearance on all sides
+   - Front clearance: 15cm (for door swing and access)
+   - Rear clearance: 10cm (for wiring and exhaust)
    - Ensure stable, level surface
 
 ### Phase 2: Fire-Resistant Panels
 
+**Panel sizes for 80x60x100cm enclosure:**
+
 1. **Cut cement board panels** to size
-   - Use carbide-tipped blade or score-and-snap
+   - Back: 80cm x 100cm
+   - Sides: 60cm x 100cm (x2)  
+   - Top: 80cm x 60cm
+   - Front: 80cm x 100cm (with window cutout)
+   - Use carbide-tipped blade or score-and-snap method
    - Wear dust mask (silica dust hazard)
    
-2. **Attach back panel**
+2. **Attach back panel** (80x100cm)
    - Use L-brackets and M6 bolts
-   - Attach to HYLLIS frame at multiple points
+   - Attach to BROR frame at multiple points (every 20cm)
    - Seal edges with fire-rated silicone
 
-3. **Attach side panels**
+3. **Attach side panels** (60x100cm each)
    - Leave 5cm gap at bottom for air intake
    - Leave 5cm gap at top for air exhaust
-   - Seal vertical seams
+   - Seal vertical seams with fire-rated silicone
+   - Ensure panels are plumb (use level)
 
-4. **Attach top panel**
-   - Cut holes for exhaust fan (120mm diameter)
-   - Mount fan blowing OUT (exhaust)
-   - Wire mesh guard over fan
+4. **Attach top panel** (80x60cm)
+   - Cut holes for exhaust fan (120mm diameter, x2)
+   - Position fans at rear for optimal airflow
+   - Mount fans blowing OUT (exhaust)
+   - Wire mesh guard over fans (prevent debris)
 
-5. **Prepare front panel**
-   - Cut large window opening (60cm x 100cm)
-   - Leave 20cm solid at bottom, 20cm at top
-   - Frame window with metal angle iron
+5. **Prepare front panel** (80x100cm)
+   - Cut large window opening (60cm wide x 80cm tall)
+   - Leave 10cm solid at bottom, 10cm at top, 10cm on each side
+   - Frame window opening with metal angle iron (structural support)
 
 ### Phase 3: Door/Window
 
@@ -513,6 +566,39 @@ gcode:
 
 ## Alternatives to Consider
 
+### Budget-Friendly Alternatives
+
+**If IKEA shelves don't fit your space/budget:**
+
+1. **Lack Table Enclosure** (~€150)
+   - **IKEA LACK Table** (55x55x45cm) - €10 (x2 tables stacked)
+   - Popular 3D printer enclosure mod
+   - Dimensions: 55x55x90cm (just fits Ender 3 V2)
+   - Add cement board panels to sides
+   - Cheaper but smaller, harder to access printer
+   - Tutorial: Search "IKEA Lack printer enclosure"
+
+2. **Metal Storage Cabinet** (~€100-150)
+   - Used metal filing cabinet or tool cabinet
+   - 60cm+ depth models (check used furniture stores)
+   - Already fire-resistant (metal construction)
+   - Add ventilation holes + fans
+   - Mount monitoring equipment
+   - Cheaper than building from scratch
+
+3. **Repurposed Metal Shelf** (~€50)
+   - Check local hardware stores for clearance shelves
+   - Need: 60cm+ depth, 80cm+ width, steel construction
+   - Many brands besides IKEA (Husky, Edsal, etc.)
+   - Often cheaper used
+
+4. **Build Your Own Aluminum Frame** (~€80-120)
+   - 2020 or 3030 aluminum extrusion
+   - Source from AliExpress, Ooznest, or Ratrig
+   - Custom exact dimensions for your space
+   - More work but perfect fit
+   - Can reuse for future printer upgrades
+
 ### Commercial Solutions:
 
 1. **3D Printer Enclosures with Fire Suppression**
@@ -530,12 +616,25 @@ gcode:
 
 ### "Good Enough" Budget Setup (~€100):
 
+**Minimum safety without full enclosure:**
+
 - WiFi camera: €35
-- Smart plug: €15
-- Smoke detector: €20
+- IKEA INSPELNING Smart plug: €10
+- Aqara smoke detector: €20
 - Fire extinguisher: €25
 - Printer on metal table, clear area
 - No full enclosure, but monitoring + quick response
+
+**Pros:**
+- Much cheaper
+- Easy to access printer
+- Still provides remote shutdown + alerts
+
+**Cons:**
+- No fire containment
+- No thermal management
+- More reliant on fast response
+- Only suitable for when you're nearby (not multi-day away)
 
 ---
 
