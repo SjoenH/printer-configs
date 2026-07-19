@@ -253,60 +253,60 @@ This is different from Marlin, which does everything on the printer's MCU.
 ### Full System Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                         YOUR SETUP                               │
+┌───────────────────────────────────────────────────────────────────┐
+│                          YOUR SETUP                               │
 │                                                                   │
-│  ┌──────────────┐                    ┌─────────────────────┐   │
-│  │   Browser    │◄──── Network ─────►│   Home Server       │   │
-│  │  (Phone/PC)  │      (WiFi/LAN)     │   (Docker/Prind)    │   │
-│  │              │                     │                     │   │
-│  │  Fluidd UI   │                     │  ┌──────────────┐  │   │
-│  │  - Start/Stop│                     │  │   Fluidd     │  │   │
-│  │  - Monitor   │                     │  │  (Web UI)    │  │   │
-│  │  - Upload    │                     │  └──────┬───────┘  │   │
-│  │    G-code    │                     │         │          │   │
-│  └──────────────┘                     │  ┌──────▼───────┐  │   │
-│                                        │  │  Moonraker   │  │   │
-│                                        │  │  (API Server)│  │   │
-│                                        │  └──────┬───────┘  │   │
-│                                        │         │          │   │
-│                                        │  ┌──────▼───────┐  │   │
-│                                        │  │   Klipper    │  │   │
-│                                        │  │  (Firmware)  │  │   │
-│                                        │  │              │  │   │
-│                                        │  │ - G-code    │  │   │
-│                                        │  │   parsing   │  │   │
-│                                        │  │ - Motion    │  │   │
-│                                        │  │   planning  │  │   │
-│                                        │  │ - Input     │  │   │
-│                                        │  │   shaping   │  │   │
-│                                        │  │ - Pressure  │  │   │
-│                                        │  │   advance   │  │   │
-│                                        │  └──────┬───────┘  │   │
-│                                        └─────────┼──────────┘   │
-│                                                  │               │
-│                                          USB Cable (Serial)      │
-│                                                  │               │
-│                               ┌──────────────────▼────────────┐ │
-│                               │   Ender 3 V2 Mainboard        │ │
-│                               │   (STM32F103 MCU)             │ │
-│                               │                                │ │
-│                               │  Klipper MCU Firmware          │ │
-│                               │  - Receives motion commands    │ │
-│                               │  - Controls stepper drivers    │ │
-│                               │  - Reads sensors (temps, etc.) │ │
-│                               │  - Sends status back to host   │ │
-│                               └────┬─────┬─────┬──────┬────────┘ │
-│                                    │     │     │      │           │
-│                       ┌────────────┘     │     │      └──────┐   │
-│                       │                  │     │             │   │
-│                ┌──────▼──────┐    ┌──────▼─────▼──────┐  ┌──▼───▼──┐
-│                │   Steppers  │    │    Heaters         │  │ Sensors │
-│                │             │    │                    │  │         │
-│                │ X, Y, Z     │    │ - Hotend (220°C)  │  │ - Temps │
-│                │ Extruder    │    │ - Bed (60°C)      │  │ - Stops │
-│                └─────────────┘    └────────────────────┘  └─────────┘
-└─────────────────────────────────────────────────────────────────┘
+│  ┌──────────────┐                    ┌──────────────────────┐    │
+│  │   Browser    │◄──── Network ─────►│   Home Server        │    │
+│  │  (Phone/PC)  │      (WiFi/LAN)    │   (Docker/Prind)     │    │
+│  │              │                    │                      │    │
+│  │  Fluidd UI   │                    │  ┌───────────────┐   │    │
+│  │  - Start/Stop│                    │  │   Fluidd      │   │    │
+│  │  - Monitor   │                    │  │   (Web UI)    │   │    │
+│  │  - Upload    │                    │  └───────┬───────┘   │    │
+│  │    G-code    │                    │          │           │    │
+│  └──────────────┘                    │  ┌───────▼───────┐   │    │
+│                                       │  │   Moonraker   │   │    │
+│                                       │  │  (API Server) │   │    │
+│                                       │  └───────┬───────┘   │    │
+│                                       │          │           │    │
+│                                       │  ┌───────▼───────┐   │    │
+│                                       │  │   Klipper     │   │    │
+│                                       │  │  (Firmware)   │   │    │
+│                                       │  │               │   │    │
+│                                       │  │  - G-code     │   │    │
+│                                       │  │    parsing    │   │    │
+│                                       │  │  - Motion     │   │    │
+│                                       │  │    planning   │   │    │
+│                                       │  │  - Input      │   │    │
+│                                       │  │    shaping    │   │    │
+│                                       │  │  - Pressure   │   │    │
+│                                       │  │    advance    │   │    │
+│                                       │  └───────┬───────┘   │    │
+│                                       └──────────┼───────────┘    │
+│                                                  │                │
+│                                          USB Cable (Serial)       │
+│                                                  │                │
+│                              ┌───────────────────▼─────────────┐  │
+│                              │   Ender 3 V2 Mainboard          │  │
+│                              │   (STM32F103 MCU)               │  │
+│                              │                                 │  │
+│                              │  Klipper MCU Firmware           │  │
+│                              │  - Receives motion commands     │  │
+│                              │  - Controls stepper drivers     │  │
+│                              │  - Reads sensors (temps, etc.)  │  │
+│                              │  - Sends status back to host    │  │
+│                              └─────┬─────┬──────┬──────┬───────┘  │
+│                                    │     │      │      │          │
+│                       ┌────────────┘     │      │      └──────┐   │
+│                       │                  │      │             │   │
+│                ┌──────▼───────┐   ┌──────▼──────▼──────┐   ┌──▼──▼──┐
+│                │   Steppers   │   │    Heaters          │   │ Sensors│
+│                │              │   │                     │   │        │
+│                │  X, Y, Z     │   │  - Hotend (220°C)   │   │ - Temps│
+│                │  Extruder    │   │  - Bed (60°C)       │   │ - Stops│
+│                └──────────────┘   └─────────────────────┘   └────────┘
+└───────────────────────────────────────────────────────────────────┘
 ```
 
 ### Data Flow: From Click to Movement
@@ -416,36 +416,36 @@ Responses received:
 ### Comparison: Klipper vs Marlin Architecture
 
 ```
-┌─────────────────── KLIPPER ───────────────────┐
-│                                                │
-│  Host Computer (Powerful CPU)                 │
-│  ├─ Complex math (motion planning)            │
-│  ├─ Input shaping calculations                │
-│  ├─ Pressure advance                          │
-│  ├─ G-code parsing                            │
-│  └─ Web interface                             │
-│       │                                        │
-│       │ USB (Simple step commands)            │
-│       ▼                                        │
-│  Printer MCU (Fast, precise timing)           │
-│  ├─ Execute steps                             │
-│  ├─ Read sensors                              │
-│  └─ Send status                               │
-└────────────────────────────────────────────────┘
+┌──────────────────── KLIPPER ──────────────────────┐
+│                                                    │
+│  Host Computer (Powerful CPU)                     │
+│  ├─ Complex math (motion planning)                │
+│  ├─ Input shaping calculations                    │
+│  ├─ Pressure advance                              │
+│  ├─ G-code parsing                                │
+│  └─ Web interface                                 │
+│       │                                            │
+│       │ USB (Simple step commands)                │
+│       ▼                                            │
+│  Printer MCU (Fast, precise timing)               │
+│  ├─ Execute steps                                 │
+│  ├─ Read sensors                                  │
+│  └─ Send status                                   │
+└────────────────────────────────────────────────────┘
 
-┌─────────────────── MARLIN ────────────────────┐
-│                                                │
-│  Printer MCU (Limited 8/32-bit CPU)           │
-│  ├─ G-code parsing                            │
-│  ├─ Motion planning (limited by CPU speed)    │
-│  ├─ Step execution                            │
-│  ├─ Sensor reading                            │
-│  ├─ LCD interface                             │
-│  └─ SD card management                        │
-│                                                │
-│  Everything happens here!                     │
-│  (Slower but self-contained)                  │
-└────────────────────────────────────────────────┘
+┌──────────────────── MARLIN ───────────────────────┐
+│                                                    │
+│  Printer MCU (Limited 8/32-bit CPU)               │
+│  ├─ G-code parsing                                │
+│  ├─ Motion planning (limited by CPU speed)        │
+│  ├─ Step execution                                │
+│  ├─ Sensor reading                                │
+│  ├─ LCD interface                                 │
+│  └─ SD card management                            │
+│                                                    │
+│  Everything happens here!                         │
+│  (Slower but self-contained)                      │
+└────────────────────────────────────────────────────┘
 ```
 
 ### Why This Architecture is Faster
@@ -459,24 +459,24 @@ Responses received:
 ### Your Specific Setup (Prind Docker)
 
 ```
-┌─────────────────────────────────────────────────────┐
-│  Home Server (Linux)                                │
-│                                                      │
-│  Docker Network                                     │
-│  ├─ Container: fluidd (port 4408)                  │
-│  ├─ Container: moonraker (port 7125)               │
-│  └─ Container: klipper                             │
-│       │                                             │
-│       └─ Mapped device: /dev/ttyPrinter ──┐        │
-│                                             │        │
-└─────────────────────────────────────────────┼───────┘
+┌──────────────────────────────────────────────────────┐
+│  Home Server (Linux)                                 │
+│                                                       │
+│  Docker Network                                      │
+│  ├─ Container: fluidd (port 4408)                   │
+│  ├─ Container: moonraker (port 7125)                │
+│  └─ Container: klipper                              │
+│       │                                              │
+│       └─ Mapped device: /dev/ttyPrinter ──┐         │
+│                                             │         │
+└─────────────────────────────────────────────┼────────┘
                                               │
                         USB Cable ────────────┘
                                               │
-                              ┌───────────────▼────────┐
-                              │  Ender 3 V2            │
-                              │  (Must power on FIRST) │
-                              └────────────────────────┘
+                            ┌─────────────────▼────────┐
+                            │  Ender 3 V2              │
+                            │  (Must power on FIRST)   │
+                            └──────────────────────────┘
 ```
 
 **Important**: Your USB power conflict means the printer must be powered on **before** starting Docker containers or booting the server. Otherwise the MCU doesn't enumerate properly on `/dev/ttyPrinter`.
