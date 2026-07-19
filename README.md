@@ -240,6 +240,249 @@ Choose your installation method:
 
 ---
 
+## How Klipper Works: Architecture Explained
+
+### Component Overview
+
+Klipper splits the work between two systems:
+1. **Host Computer** (Raspberry Pi or Docker server) - Does the complex math
+2. **Printer MCU** (mainboard in your printer) - Does the precise motor control
+
+This is different from Marlin, which does everything on the printer's MCU.
+
+### Full System Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                         YOUR SETUP                               │
+│                                                                   │
+│  ┌──────────────┐                    ┌─────────────────────┐   │
+│  │   Browser    │◄──── Network ─────►│   Home Server       │   │
+│  │  (Phone/PC)  │      (WiFi/LAN)     │   (Docker/Prind)    │   │
+│  │              │                     │                     │   │
+│  │  Fluidd UI   │                     │  ┌──────────────┐  │   │
+│  │  - Start/Stop│                     │  │   Fluidd     │  │   │
+│  │  - Monitor   │                     │  │  (Web UI)    │  │   │
+│  │  - Upload    │                     │  └──────┬───────┘  │   │
+│  │    G-code    │                     │         │          │   │
+│  └──────────────┘                     │  ┌──────▼───────┐  │   │
+│                                        │  │  Moonraker   │  │   │
+│                                        │  │  (API Server)│  │   │
+│                                        │  └──────┬───────┘  │   │
+│                                        │         │          │   │
+│                                        │  ┌──────▼───────┐  │   │
+│                                        │  │   Klipper    │  │   │
+│                                        │  │  (Firmware)  │  │   │
+│                                        │  │              │  │   │
+│                                        │  │ - G-code    │  │   │
+│                                        │  │   parsing   │  │   │
+│                                        │  │ - Motion    │  │   │
+│                                        │  │   planning  │  │   │
+│                                        │  │ - Input     │  │   │
+│                                        │  │   shaping   │  │   │
+│                                        │  │ - Pressure  │  │   │
+│                                        │  │   advance   │  │   │
+│                                        │  └──────┬───────┘  │   │
+│                                        └─────────┼──────────┘   │
+│                                                  │               │
+│                                          USB Cable (Serial)      │
+│                                                  │               │
+│                               ┌──────────────────▼────────────┐ │
+│                               │   Ender 3 V2 Mainboard        │ │
+│                               │   (STM32F103 MCU)             │ │
+│                               │                                │ │
+│                               │  Klipper MCU Firmware          │ │
+│                               │  - Receives motion commands    │ │
+│                               │  - Controls stepper drivers    │ │
+│                               │  - Reads sensors (temps, etc.) │ │
+│                               │  - Sends status back to host   │ │
+│                               └────┬─────┬─────┬──────┬────────┘ │
+│                                    │     │     │      │           │
+│                       ┌────────────┘     │     │      └──────┐   │
+│                       │                  │     │             │   │
+│                ┌──────▼──────┐    ┌──────▼─────▼──────┐  ┌──▼───▼──┐
+│                │   Steppers  │    │    Heaters         │  │ Sensors │
+│                │             │    │                    │  │         │
+│                │ X, Y, Z     │    │ - Hotend (220°C)  │  │ - Temps │
+│                │ Extruder    │    │ - Bed (60°C)      │  │ - Stops │
+│                └─────────────┘    └────────────────────┘  └─────────┘
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Data Flow: From Click to Movement
+
+```
+1. User clicks "Start Print" in browser
+   │
+   ▼
+2. Fluidd sends command to Moonraker API
+   │
+   ▼
+3. Moonraker passes to Klipper
+   │
+   ▼
+4. Klipper reads G-code file
+   │
+   ▼
+5. Klipper processes commands:
+   - Parses: "G1 X100 Y100 F3000"
+   - Calculates: Motion path, acceleration curve
+   - Applies: Input shaping, pressure advance
+   - Plans: Optimal step timing for smooth motion
+   │
+   ▼
+6. Klipper sends pre-calculated step commands to MCU
+   │
+   ▼
+7. MCU executes steps with precise timing:
+   - Step X motor: 400 steps
+   - Step Y motor: 400 steps
+   - Adjust extruder: 15 steps (with pressure advance)
+   │
+   ▼
+8. Motors move, print head travels to X100 Y100
+   │
+   ▼
+9. MCU sends status back to Klipper
+   │
+   ▼
+10. Browser shows updated position in real-time
+```
+
+### Component Deep Dive
+
+#### **Fluidd (Web Interface)**
+- **What it does**: Pretty web UI you interact with
+- **Runs on**: Host computer (Pi/Docker)
+- **Access**: Browser at `http://fluiddpi.local` or `http://<server-ip>:4408` (Prind)
+- **Features**:
+  - Upload and start prints
+  - Live camera feed
+  - Temperature graphs
+  - Macro buttons (START_PRINT, BED_SCREWS_ADJUST, etc.)
+  - Config file editor
+  - Console for manual commands
+
+#### **Moonraker (API Server)**
+- **What it does**: Translates between Fluidd and Klipper
+- **Runs on**: Host computer (same as Klipper)
+- **Also handles**:
+  - File uploads
+  - Webcam streaming
+  - Update management
+  - Power control (if configured)
+  - History and statistics
+
+#### **Klipper (The Brain)**
+- **What it does**: All the smart motion planning
+- **Runs on**: Host computer (Python process)
+- **Responsibilities**:
+  - Parse G-code into motion commands
+  - Calculate acceleration curves
+  - Apply input shaping (cancel vibrations)
+  - Apply pressure advance (smooth extrusion)
+  - Temperature PID control
+  - Macro execution
+  - Safety checks (temperature limits, position limits)
+- **Why it's fast**: Uses 32-bit floating point math on powerful host CPU instead of limited 8/32-bit MCU
+
+#### **Klipper MCU Firmware**
+- **What it does**: Precise, real-time step execution
+- **Runs on**: Printer mainboard (STM32F103 in Ender 3 V2)
+- **Responsibilities**:
+  - Receive step commands from host Klipper
+  - Generate step pulses at exact microsecond timing
+  - Read temperature sensors
+  - Monitor endstops
+  - Control heaters (on/off based on Klipper's PID calculations)
+  - Send status updates back to host
+- **Why it's simple**: Only does timing-critical tasks, no complex math
+
+### Communication Protocol
+
+```
+Host Klipper ←────── USB Serial (115200 baud) ─────→ Printer MCU
+             
+Commands sent (examples):
+  → "queue_step oid=5 interval=2000 count=400 add=0"
+  → "set_digital_out pin=PA1 value=1"  (turn on heater)
+  → "get_temperature sensor=0"
+
+Responses received:
+  ← "temperature sensor=0 value=22.5"
+  ← "endstop_state oid=3 triggered=1"
+```
+
+### Comparison: Klipper vs Marlin Architecture
+
+```
+┌─────────────────── KLIPPER ───────────────────┐
+│                                                │
+│  Host Computer (Powerful CPU)                 │
+│  ├─ Complex math (motion planning)            │
+│  ├─ Input shaping calculations                │
+│  ├─ Pressure advance                          │
+│  ├─ G-code parsing                            │
+│  └─ Web interface                             │
+│       │                                        │
+│       │ USB (Simple step commands)            │
+│       ▼                                        │
+│  Printer MCU (Fast, precise timing)           │
+│  ├─ Execute steps                             │
+│  ├─ Read sensors                              │
+│  └─ Send status                               │
+└────────────────────────────────────────────────┘
+
+┌─────────────────── MARLIN ────────────────────┐
+│                                                │
+│  Printer MCU (Limited 8/32-bit CPU)           │
+│  ├─ G-code parsing                            │
+│  ├─ Motion planning (limited by CPU speed)    │
+│  ├─ Step execution                            │
+│  ├─ Sensor reading                            │
+│  ├─ LCD interface                             │
+│  └─ SD card management                        │
+│                                                │
+│  Everything happens here!                     │
+│  (Slower but self-contained)                  │
+└────────────────────────────────────────────────┘
+```
+
+### Why This Architecture is Faster
+
+1. **Better CPU**: Raspberry Pi (1.5GHz quad-core) vs STM32 (72MHz single-core)
+2. **Lookahead**: Klipper can plan 100+ moves ahead, Marlin limited by RAM
+3. **Math precision**: 64-bit float on Pi vs 32-bit on MCU = smoother curves
+4. **Input shaping**: Requires fast Fourier transforms - too heavy for MCU
+5. **No LCD overhead**: MCU just does motion, no screen updates
+
+### Your Specific Setup (Prind Docker)
+
+```
+┌─────────────────────────────────────────────────────┐
+│  Home Server (Linux)                                │
+│                                                      │
+│  Docker Network                                     │
+│  ├─ Container: fluidd (port 4408)                  │
+│  ├─ Container: moonraker (port 7125)               │
+│  └─ Container: klipper                             │
+│       │                                             │
+│       └─ Mapped device: /dev/ttyPrinter ──┐        │
+│                                             │        │
+└─────────────────────────────────────────────┼───────┘
+                                              │
+                        USB Cable ────────────┘
+                                              │
+                              ┌───────────────▼────────┐
+                              │  Ender 3 V2            │
+                              │  (Must power on FIRST) │
+                              └────────────────────────┘
+```
+
+**Important**: Your USB power conflict means the printer must be powered on **before** starting Docker containers or booting the server. Otherwise the MCU doesn't enumerate properly on `/dev/ttyPrinter`.
+
+---
+
 ## Raspberry Pi Setup
 
 ### Method 1: Pre-built Image (Easiest - Recommended)
