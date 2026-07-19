@@ -2,6 +2,8 @@
 
 **⚠️ DISCLAIMER: This guide reduces risk but does NOT eliminate it. Unattended printing always carries fire risk. Use at your own risk. Check local fire codes and insurance policies.**
 
+**🇳🇴 Norwegian Market Guide** - Prices in NOK, suppliers available in Norway
+
 ---
 
 ## Overview
@@ -15,130 +17,189 @@ This enclosure design prioritizes:
 
 ---
 
-## Bill of Materials (IKEA + Hardware Store)
+## Bill of Materials (Norwegian Market)
+
+**Prices in NOK. Most items available from IKEA Norge, Biltema, Clas Ohlson, Byggmakker, or Jernia.**
 
 ### Ender 3 V2 Dimensions (with clearance needed)
 - **Printer footprint:** 44cm (W) x 41cm (D) x 46.5cm (H)
 - **Minimum enclosure:** 60cm (W) x 50cm (D) x 70cm (H)
 - **Recommended enclosure:** 80cm (W) x 60cm (D) x 100cm (H)
 
-### Structure (IKEA Options)
+### Structure (IKEA Norge Options)
 
-**Option 1: OMAR Shelf Unit (Recommended)** - €40
+**Option 1: OMAR Shelf Unit (Budget option)** - 399 kr
+- **IKEA Norge:** Available in-store and online
 - Dimensions: 92cm (W) x 36cm (D) x 181cm (H)
 - Galvanized steel (fire-resistant)
 - Adjustable shelves
-- Stable for mounting panels
 - **Issue:** 36cm depth is tight, printer fits but limited clearance
 
-**Option 2: BROR Shelf Unit (Best fit)** - €70
+**Option 2: BROR Shelf Unit (Recommended - Best fit)** - 699 kr
+- **IKEA Norge:** Available in-store (Furuset, Slependen, Leangen, Åsane)
 - Dimensions: 85cm (W) x 55cm (D) x 190cm (H)  
 - Heavy-duty steel frame
 - 55cm depth - plenty of room! ✅
 - Can support heavy cement board panels
-- More expensive but proper dimensions
+- Check stock: IKEA.no
 
-**Option 3: Custom Frame (Most flexible)** - €50-80
+**Option 3: Custom Frame (Most flexible)** - 500-800 kr
 - Build frame from:
-  - **Aluminum extrusion** (2020 or 3030 profile) - AliExpress/local supplier
-  - **Steel angle iron** - Hardware store
+  - **Aluminum extrusion** (2020 or 3030 profile)
+    - Source: AliExpress (long shipping), or Motedis.no
+  - **Steel angle iron** (vinkeljern)
+    - **Byggmakker, Jernia, Maxbohttps:** 50-150 kr/meter depending on size
 - Custom size: 80cm x 60cm x 100cm
 - More work but perfect fit
 
-**Option 4: HYLLIS (NOT RECOMMENDED)** - €15
+**Option 4: HYLLIS (NOT RECOMMENDED)** - 149 kr
 - Dimensions: 80cm (W) x 27cm (D) x 140cm (H)
 - ❌ **Only 27cm depth - TOO SHALLOW for Ender 3 V2**
 - Printer base is 41cm deep, won't fit!
 
-**Recommendation: Use BROR for proper fit, or OMAR if budget is tight (but tight fit)**
+**Recommendation: Use BROR for proper fit, or OMAR if budget is tight**
 
-### Fire-Resistant Panels
+### Fire-Resistant Panels (Norwegian suppliers)
 
 **Panel Dimensions (for 80x60x100cm enclosure):**
 
-- **Cement Board** (HardieBacker or similar) - 6mm thick
+**Cement Board Options:**
+
+1. **Fibergipsplate / Vanntett gipsplate**
+   - **Byggmakker, Clas Ohlson, Jernia, Maxbo**
+   - GIB-Board Våtrom 12.5mm: 200-300 kr/plate (120x240cm)
+   - Knauf Aquapanel: 300-400 kr/plate (90x120cm)
+   - More expensive but locally available
+
+2. **Sementplate (Actual cement board)**
+   - **Byggmakker "James Hardie Hardiebacker"** (if available)
+   - **Or:** European brands like "Fermacell Gipsfiberplate"
+   - 250-400 kr/plate depending on size
+   - Best fire resistance
+
+3. **Budget Alternative: Galvanisert stålplate**
+   - **Biltema, Jernia:** 1mm galvanized sheet metal
+   - 150-250 kr/m²
+   - Lighter, easier to work with
+   - Already fire-proof
+   - **Recommended for Norwegian market** (easier to source)
+
+**Panel Cutting:**
+- Panels needed:
   - Back: 80cm x 100cm
   - Sides: 60cm x 100cm (x2)
   - Top: 80cm x 60cm
-  - Front: 80cm x 100cm (with cutout for door/window)
-  - Bottom: Concrete paver 80cm x 60cm (or double cement board)
-  - Cost: ~€80-120
+  - Front: 80cm x 100cm (with cutout)
+  - Bottom: Concrete paver or double layer
+- **Cost:** 800-1200 kr for all panels
 
-**Alternative:** Sheet metal (galvanized steel, 1mm thick) - lighter but more expensive
+**Alternative:** Sheet metal (galvanized steel, 1mm thick) - 600-1000 kr total
 
 ### Door/Window
-- **Tempered glass** or **Polycarbonate sheet** (fire-rated if possible)
-  - Size: 60cm x 100cm viewing window
-  - Mounted in metal frame
-  - Cost: €30-50
+- **Herdet glass (Tempered glass)** or **Polykarbonat plate**
+  - **Clas Ohlson, Glassmester1 (local glass shops)**
+  - Size: 60cm x 80cm viewing window
+  - Mounted in metal frame (aluminum U-channel from Biltema/Jernia)
+  - Cost: 350-580 kr
 
 ### Ventilation
-- **IKEA FÖRNUFTIG Air Purifier** (if using ABS) - €55
-  - OR **120mm PC case fans** (x2) with dust filters - €20
-  - **Metal ducting** (100mm diameter, 2-3m) - €25
-  - **Vent to outside** (window insert or wall vent) - €30
+
+**Fan Options:**
+- **120mm PC-vifter** (x2) with dust filters
+  - **Komplett.no, Elkjøp, Power:** 150-300 kr for 2 fans
+  - Noctua or Arctic brand (quiet operation)
+  
+**OR for ABS printing:**
+- **IKEA FÖRNUFTIG Air Purifier** - 630 kr
+  - Built-in filtration
+  - Quieter than PC fans
+
+**Ducting:**
+- **Metallkanal** (100mm diameter, 2-3m)
+  - **Biltema, Clas Ohlson, Jernia:** 200-400 kr
+  - Flexible aluminum ducting
+  
+- **Vent to outside** (window insert or wall vent)
+  - **Byggmakker, Maxbo:** 250-400 kr
+  - Or DIY with plywood + hole saw
 
 ### Fire Safety Equipment
 
 #### 1. Automatic Fire Suppression
-- **StoveTop FireStop** or similar automatic fire suppression
+- **Automatic Fire Extinguisher Ball** or **Elide Fire Ball**
+  - **Source:** AliExpress, Amazon.de (ships to Norway)
+  - **Alternative:** StoveTop FireStop (harder to find in Norway)
   - Mounts above printer
-  - Activates at 400°F (204°C)
+  - Activates at 70-200°C (depending on model)
   - Releases fire suppressant automatically
-  - Cost: €40-60
-  - Link: Search "automatic fire extinguisher ball" or "stove top fire stop"
+  - Cost: 400-700 kr (AliExpress), 800-1200 kr (Amazon EU)
+  - Search: "automatic fire extinguisher ball" or "Elide Fire"
 
 #### 2. Smoke Detection
 - **Aqara Smoke Detector** (Matter/HomeKit compatible) - Already have ✅
+  - **Komplett.no, Proshop.no:** ~400 kr if you need another
   - Mount inside enclosure near top
   - Connects to Home Assistant / HomeKit
   - Can trigger automations
 
 #### 3. Temperature Monitoring
-- **Aqara Temperature/Humidity Sensor** - €15
+- **Aqara Temperature/Humidity Sensor**
+  - **Komplett.no, Proshop.no:** ~200 kr
   - Monitor ambient temperature inside enclosure
   - Alert if over 40°C (104°F)
 
 #### 4. Manual Fire Extinguisher
-- **ABC Dry Chemical Fire Extinguisher** (2kg minimum)
+- **ABC Pulverapparat** (2kg minimum)
+  - **Biltema:** 199 kr (2kg)
+  - **Clas Ohlson:** 249 kr (2kg)
+  - **Jernia/Byggmakker:** 299-399 kr
   - Mount OUTSIDE enclosure within reach
-  - Cost: €20-30
+  - Check annually
 
 ### Remote Control & Monitoring
 
 #### 0. Smart Home Hub (Required)
-- **IKEA DIRIGERA Hub** (Matter/Zigbee gateway) - €60
+- **IKEA DIRIGERA Hub** (Matter/Zigbee gateway) - 599 kr
+  - **IKEA Norge:** Available in all stores
   - Central hub for all IKEA smart devices
   - Matter bridge functionality
   - Integrates with Home Assistant
   - **OR use existing Home Assistant setup** if you have Zigbee dongle
 
 **Alternative Hubs:**
-- **Home Assistant with Zigbee dongle** (Sonoff ZBDongle-E, ~€15)
+- **Home Assistant with Zigbee dongle**
+  - **Sonoff ZBDongle-E:** 150-250 kr (AliExpress, Amazon)
+  - Needs Home Assistant already running
 - **Apple HomePod/Apple TV** (Matter controller)
-- **Aqara Hub M2** (€70) - If using multiple Aqara devices
+  - If you're in Apple ecosystem
+- **Aqara Hub M2**
+  - **Komplett.no, Proshop.no:** ~800 kr
+  - If using multiple Aqara devices
 
 #### 1. Camera
 - **WiFi Camera with night vision**
   - Options:
-    - **IKEA TRÅDFRI Gateway + Camera** - €30
-    - **Wyze Cam v3** - €35
-    - **Reolink E1** - €40
+    - **Xiaomi Mi Home Security Camera 360°** - 350-450 kr (Komplett.no)
+    - **TP-Link Tapo C200** - 350-450 kr (Elkjøp, Power, Komplett)
+    - **Reolink E1** - 450-600 kr (Proshop, Amazon)
+    - **Wyze Cam v3** - Import from US/UK (400-500 kr + shipping)
   - Mount above printer, angled down
   - 24/7 recording or motion detection
+  - Local storage (SD card) preferred for privacy
 
 #### 2. Smart Power Control
 
 **Primary Power Switch:**
-- **IKEA INSPELNING Smart Plug** (Matter/Zigbee compatible) - €10
+- **IKEA INSPELNING Smart Plug** (Matter/Zigbee compatible) - 99 kr
+  - **IKEA Norge:** Available in all stores
   - Matter support for cross-platform compatibility
   - Works with Home Assistant, Apple HomeKit, Google Home
   - Rated for 3680W (more than enough for Ender 3 V2)
-  - Available at IKEA stores
   
 **Alternative Options:**
-- **IKEA TRÅDFRI Smart Plug** (Zigbee, older model) - €10
-- **Aqara Smart Plug** (Matter/Thread) - €15
+- **IKEA TRÅDFRI Smart Plug** (Zigbee, older model) - 99 kr
+- **Aqara Smart Plug EU** (Matter/Thread)
+  - **Komplett.no, Proshop.no:** ~300-400 kr
   - Smaller form factor
   - Energy monitoring
 
@@ -153,28 +214,41 @@ This enclosure design prioritizes:
 - Smart plugs: 3680W rated (16A @ 230V)
 - Safe margin ✅
 
-#### 3. Backup: Physical Power Cut
+#### 3. Backup: Physical Power Cut (Optional Advanced)
 - **Normally-closed relay** connected to smoke detector
+  - **Kjell & Company, Elfa Distrelec:** 150-300 kr
   - Cuts power automatically if smoke detected
   - Works even if WiFi/hub fails
-  - Cost: €15-25
+  - Requires electrical knowledge to wire safely
 
-### Hardware
-- **M6 Bolts & Nuts** (stainless steel) - €10
-- **L-brackets** (steel, 90-degree) - €15
-- **High-temp silicone sealant** (fire-rated) - €8
-- **Aluminum tape** (heat-resistant) - €8
-- **Wire mesh** (steel, for vent guards) - €10
+### Hardware (Norwegian suppliers)
 
-**Total Cost Estimate:**
+- **M6 Bolts & Nuts** (rustfritt stål / stainless steel)
+  - **Biltema, Clas Ohlson, Jernia:** 50-120 kr for assorted pack
+  
+- **L-brackets / Vinkelbeslag** (steel, 90-degree)
+  - **Biltema, Clas Ohlson:** 20-50 kr each, need 10-15 pieces
+  - Total: 150-250 kr
+  
+- **High-temp silicone sealant** (fire-rated / brannsikker)
+  - **Byggmakker, Clas Ohlson:** 80-150 kr per tube
+  - Need 2-3 tubes: 200-400 kr
+  
+- **Aluminum tape** (heat-resistant / varmebestandig aluminiumstape)
+  - **Biltema, Clas Ohlson, Jernia:** 50-100 kr
+  
+- **Wire mesh / Stålnett** (steel, for vent guards)
+  - **Biltema, Byggmakker:** 100-200 kr per meter
 
-| Option | Frame | Panels | Electronics | Total |
-|--------|-------|--------|-------------|-------|
-| **Budget (OMAR)** | €40 | €80 | €250 | €370-490 |
-| **Recommended (BROR)** | €70 | €100 | €250 | €420-540 |
-| **Custom Frame** | €60 | €100 | €250 | €410-530 |
+**Total Cost Estimate (Norwegian Market):**
 
-Add €60 if you need DIRIGERA Hub (subtract if you already have Matter/Zigbee hub)
+| Option | Frame | Panels | Electronics | Hardware | Total |
+|--------|-------|--------|-------------|----------|-------|
+| **Budget (OMAR)** | 399 kr | 800 kr | 2500 kr | 600 kr | **4300-5500 kr** |
+| **Recommended (BROR)** | 699 kr | 1000 kr | 2500 kr | 600 kr | **4800-6000 kr** |
+| **Custom Frame** | 600 kr | 1000 kr | 2500 kr | 600 kr | **4700-5800 kr** |
+
+**Note:** Electronics cost assumes you already have Aqara smoke detector. Add 599 kr if you need DIRIGERA Hub (subtract if you already have Home Assistant with Zigbee).
 
 ---
 
@@ -566,35 +640,37 @@ gcode:
 
 ## Alternatives to Consider
 
-### Budget-Friendly Alternatives
+### Budget-Friendly Alternatives (Norwegian Market)
 
 **If IKEA shelves don't fit your space/budget:**
 
-1. **Lack Table Enclosure** (~€150)
-   - **IKEA LACK Table** (55x55x45cm) - €10 (x2 tables stacked)
+1. **Lack Table Enclosure** (~1500-2000 kr)
+   - **IKEA LACK Table** (55x55x45cm) - 99 kr (x2 tables stacked)
    - Popular 3D printer enclosure mod
    - Dimensions: 55x55x90cm (just fits Ender 3 V2)
-   - Add cement board panels to sides
+   - Add cement board or sheet metal panels to sides
    - Cheaper but smaller, harder to access printer
    - Tutorial: Search "IKEA Lack printer enclosure"
+   - **Source:** IKEA Norge
 
-2. **Metal Storage Cabinet** (~€100-150)
+2. **Metal Storage Cabinet** (~1000-2000 kr)
    - Used metal filing cabinet or tool cabinet
-   - 60cm+ depth models (check used furniture stores)
+   - 60cm+ depth models
+   - **Check:** Finn.no, Facebook Marketplace, used office furniture
    - Already fire-resistant (metal construction)
    - Add ventilation holes + fans
    - Mount monitoring equipment
    - Cheaper than building from scratch
 
-3. **Repurposed Metal Shelf** (~€50)
-   - Check local hardware stores for clearance shelves
+3. **Repurposed Metal Shelf** (~500-1500 kr)
+   - Check clearance at Biltema, Jysk, Clas Ohlson
    - Need: 60cm+ depth, 80cm+ width, steel construction
-   - Many brands besides IKEA (Husky, Edsal, etc.)
-   - Often cheaper used
+   - Often on sale or used on Finn.no
+   - Many brands: Biltema Solid, Jysk Reality, etc.
 
-4. **Build Your Own Aluminum Frame** (~€80-120)
+4. **Build Your Own Aluminum Frame** (~900-1400 kr)
    - 2020 or 3030 aluminum extrusion
-   - Source from AliExpress, Ooznest, or Ratrig
+   - **Source:** AliExpress (long shipping), Motedis.com (EU shipping)
    - Custom exact dimensions for your space
    - More work but perfect fit
    - Can reuse for future printer upgrades
@@ -602,28 +678,31 @@ gcode:
 ### Commercial Solutions:
 
 1. **3D Printer Enclosures with Fire Suppression**
-   - Prusa Enclosure + modifications: €300-400
-   - Creality enclosure + fire safety: €200-300
+   - Prusa Enclosure + modifications: 3500-4500 kr
+   - Creality enclosure + fire safety: 2300-3500 kr
+   - **Source:** 3Dmakershop.no, Proshop.no, Amazon.de
 
-2. **PrintWatch AI Monitoring** (~€10/month)
+2. **PrintWatch AI Monitoring** (~115 kr/month)
    - AI detects print failures
    - Can auto-pause prints
    - Alerts to phone
+   - **Source:** printwatch.io
 
 3. **The Spaghetti Detective** (similar to PrintWatch)
    - AI failure detection
    - Remote monitoring
+   - **Source:** thespaghettidetective.com
 
-### "Good Enough" Budget Setup (~€100):
+### "Good Enough" Budget Setup (~1200 kr):
 
 **Minimum safety without full enclosure:**
 
-- WiFi camera: €35
-- IKEA INSPELNING Smart plug: €10
-- Aqara smoke detector: €20
-- Fire extinguisher: €25
-- Printer on metal table, clear area
-- No full enclosure, but monitoring + quick response
+- **WiFi camera:** 350-450 kr (TP-Link Tapo C200 from Elkjøp/Komplett)
+- **IKEA INSPELNING Smart plug:** 99 kr (IKEA Norge)
+- **Aqara smoke detector:** 400 kr (if needed, you have one)
+- **Fire extinguisher:** 199-249 kr (Biltema, Clas Ohlson)
+- **Printer on metal table, clear area**
+- **No full enclosure, but monitoring + quick response**
 
 **Pros:**
 - Much cheaper
@@ -635,6 +714,10 @@ gcode:
 - No thermal management
 - More reliant on fast response
 - Only suitable for when you're nearby (not multi-day away)
+
+**Recommended for:** Overnight prints while home, day-long prints while at work (8 hours)
+
+**NOT recommended for:** Multi-day prints while traveling
 
 ---
 

@@ -4,11 +4,185 @@ This repository contains configuration files for my 3D printers running Klipper 
 
 ## Quick Start
 
+**New to 3D printing?** Check the **[Glossary](#3d-printing-glossary)** below for explanations of common terms and problems.
+
 Choose your installation method:
 - **[Raspberry Pi Setup](#raspberry-pi-setup)** - Recommended for dedicated printer host
 - **[Prind (Docker) Setup](#prind-docker-setup)** - For running on any Linux machine with Docker
 - **[Deployment](#deployment)** - Deploy configs to existing installation
 - **[Fire-Safety Enclosure](FIRE-SAFETY-ENCLOSURE.md)** - ⚠️ **For multi-day unattended printing**
+
+---
+
+## 3D Printing Glossary
+
+### Common Terms
+
+#### Hardware Terms
+- **Bowden Extruder**: Extruder motor mounted on frame, pushes filament through long tube to hotend. Lighter printhead = faster speeds, but harder to tune retractions.
+- **Direct Drive**: Extruder motor mounted directly on printhead. Better control, easier tuning, but heavier = slower speeds.
+- **Hotend**: The heated part that melts filament (nozzle + heater block + heat sink).
+- **Nozzle**: The brass tip where melted plastic comes out. Common sizes: 0.4mm (standard), 0.6mm (faster), 0.2mm (detail).
+- **Heat Break**: The tube separating hot and cold zones in the hotend. Critical for preventing heat creep.
+- **PTFE Tube**: Teflon tube that guides filament from extruder to hotend (Bowden) or inside hotend (all-metal vs PTFE-lined).
+- **Mainboard/MCU**: The printer's brain - runs Klipper firmware. Ender 3 V2 has STM32F103 chip.
+
+#### Firmware & Software
+- **Klipper**: Advanced 3D printer firmware that runs on host computer + printer MCU. This is what we're using.
+- **Marlin**: Traditional firmware that runs entirely on printer MCU. Stock Ender 3 V2 firmware.
+- **Fluidd/Mainsail**: Web interfaces for Klipper (like OctoPrint but modern).
+- **Moonraker**: API server that connects Klipper to web interfaces.
+- **OrcaSlicer/PrusaSlicer/Cura**: Software that converts 3D models (STL) into printer instructions (G-code).
+
+#### Motion & Speed Settings
+- **Acceleration** (mm/s²): How fast the printer speeds up/slows down. Higher = faster prints but more vibration.
+  - Stock Ender 3 V2: 3000 mm/s²
+  - Our setup: 7000 mm/s²
+  - High-end: 10,000-20,000 mm/s²
+
+- **Velocity/Speed** (mm/s): How fast the printhead moves.
+  - Outer walls: 40-80 mm/s (quality)
+  - Infill: 150-300 mm/s (speed)
+  - Travel moves: 150-300 mm/s
+
+- **Jerk/Square Corner Velocity**: Max speed change without slowing down. Lower = smoother corners, higher = faster prints.
+
+#### Advanced Tuning Features
+
+##### **Pressure Advance** (PA)
+**What it is:** Compensates for the delay between extruder pushing filament and plastic coming out the nozzle.
+
+**The problem:** When extruder speeds up, there's a lag before flow increases → under-extrusion at corners. When it slows down, pressure keeps pushing → over-extrusion (bulging corners).
+
+**How it works:** Klipper adjusts extruder speed slightly ahead of time to compensate for pressure buildup in the hotend.
+
+**Values:**
+- Bowden extruders: 0.5-1.0 (long tube = more pressure delay)
+- Direct drive: 0.0-0.3 (short path = less delay)
+- Our current setting: 0.65
+
+**Signs you need to tune it:**
+- Bulging corners (PA too low)
+- Gaps at corners (PA too high)
+- Inconsistent line width
+
+**See:** [TUNING-GUIDE.md](TUNING-GUIDE.md) for calibration procedure.
+
+##### **Input Shaping**
+**What it is:** Eliminates ringing/ghosting (wavy lines after sharp corners) by measuring printer's natural vibration frequency and compensating.
+
+**How it works:** Klipper sends micro-vibrations to cancel out the printer's resonance, like noise-cancelling headphones but for motion.
+
+**Types:**
+- MZV (our setting): Balanced, good for most printers
+- EI: Aggressive ringing reduction
+- 2HUMP_EI: Even more aggressive
+
+**Our setup:** MZV @ 40Hz on both X and Y axes
+
+##### **Retraction**
+**What it is:** Pulling filament back slightly when moving between printed parts to prevent oozing/stringing.
+
+**Settings:**
+- **Distance**: How far to pull back (mm)
+  - Bowden: 4-8mm (long tube)
+  - Direct drive: 0.5-2mm (short path)
+  - Our setting: 6.5mm
+  
+- **Speed**: How fast to retract (mm/s)
+  - Typical: 25-50 mm/s
+  - Our setting: 45 mm/s
+
+- **Z-hop**: Lift nozzle during travel moves to avoid hitting print
+  - Our setting: 0.2mm
+
+**Signs of bad retraction:**
+- Stringing/cobwebbing (not enough retraction)
+- Grinding filament (too much retraction)
+- Clogs (too much retraction pulls molten plastic into cold zone)
+
+##### **Flow Rate / E-steps**
+**What it is:** How much filament the extruder pushes per mm of movement.
+
+**E-steps:** Motor steps per mm of filament. Should be calibrated to actual filament diameter.
+
+**Flow rate:** Percentage multiplier (100% = perfect, 95% = slight under-extrusion).
+
+**Signs of bad calibration:**
+- Gaps between lines (under-extrusion)
+- Blobby prints (over-extrusion)
+
+---
+
+### Common Print Problems
+
+#### Stringing / Cobwebbing
+**What:** Thin plastic strands between printed parts.
+**Causes:** 
+- Retraction distance too low
+- Temperature too high
+- Nozzle oozing during travel moves
+**Fixes:** Increase retraction, lower temperature 5-10°C, enable Z-hop
+
+#### Ringing / Ghosting
+**What:** Wavy ripple pattern after sharp corners.
+**Causes:** Printer vibration/resonance at high speeds.
+**Fixes:** Input shaping (already enabled), lower acceleration, add dampening feet
+
+#### Layer Shifting
+**What:** Print suddenly shifts horizontally mid-print.
+**Causes:** 
+- Loose belts
+- Acceleration too high
+- Mechanical collision
+**Fixes:** Tighten belts, lower acceleration, check for obstructions
+
+#### Bed Adhesion Issues
+**What:** Print doesn't stick to bed or warps/lifts at corners.
+**Causes:**
+- Bed not level
+- Nozzle too far from bed
+- Bed too cold
+- Dirty bed surface
+**Fixes:** 
+- Level bed with `BED_SCREWS_ADJUST`
+- Lower Z offset (get nozzle closer)
+- Increase bed temp 5-10°C
+- Clean bed with isopropyl alcohol
+
+#### Under-extrusion
+**What:** Gaps in print, weak layers, missing infill.
+**Causes:**
+- E-steps not calibrated
+- Flow rate too low
+- Partial clog in nozzle
+- Pressure advance too high
+**Fixes:** Calibrate E-steps, check for clogs, lower pressure advance
+
+#### Over-extrusion
+**What:** Blobby surface, elephant foot, layers squished together.
+**Causes:**
+- E-steps over-calibrated
+- Flow rate too high  
+- First layer too close to bed
+**Fixes:** Calibrate E-steps, reduce flow rate, raise Z offset
+
+#### Heat Creep
+**What:** Filament softening too early in the cold zone, causing jams.
+**Causes:**
+- Cooling fan failed
+- PTFE tube not seated properly (our current situation!)
+- Printing too hot
+- Ambient temperature too high
+**Fixes:** Check hotend fan, reseat PTFE tube properly, lower temp, add enclosure cooling
+
+#### Blobs and Zits
+**What:** Random bumps on surface where layer starts/stops.
+**Causes:**
+- Z-seam placement
+- Oozing at layer change
+- Pressure not released properly
+**Fixes:** Tune pressure advance, adjust retraction, use "aligned" Z-seam placement
 
 ---
 
