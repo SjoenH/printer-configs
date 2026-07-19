@@ -679,6 +679,258 @@ Responses received:
 
 ---
 
+## Camera Setup for Prind
+
+### Overview
+
+Prind supports webcam streaming through the `ustreamer` service. This allows you to monitor your prints remotely through the Fluidd web interface.
+
+### Supported Cameras
+
+- **USB Webcams** (Logitech C270, C920, generic UVC cameras)
+- **Raspberry Pi Camera Module** (if running on Pi)
+- **Most V4L2-compatible cameras**
+
+### Step-by-Step Setup
+
+#### 1. Connect Camera
+
+**USB Webcam:**
+```bash
+# Plug in USB camera to your server
+
+# Verify camera is detected
+ls /dev/video*
+# Should show: /dev/video0 (or video1, video2, etc.)
+
+# Check camera details
+v4l2-ctl --list-devices
+# Look for your camera name
+```
+
+**Expected output:**
+```
+UVC Camera (046d:0825): /dev/video0
+    /dev/video0
+    /dev/video1
+```
+
+#### 2. Find Camera Device Path
+
+```bash
+# List video devices with details
+v4l2-ctl --list-formats-ext -d /dev/video0
+
+# Test camera works
+ffmpeg -f v4l2 -i /dev/video0 -frames:v 1 /tmp/test.jpg
+# Check /tmp/test.jpg to verify image
+```
+
+#### 3. Configure Prind for Camera
+
+**Edit `docker-compose.override.yaml`:**
+
+```bash
+cd ~/prind
+nano docker-compose.override.yaml
+```
+
+**Add/modify the `ustreamer` service:**
+
+```yaml
+services:
+  ustreamer:
+    devices:
+      - /dev/video0:/dev/webcam  # Map your camera device
+    environment:
+      USTREAMER_DEVICE: /dev/webcam
+      USTREAMER_RESOLUTION: 1280x720  # Adjust for your camera
+      USTREAMER_FRAMERATE: 15         # Lower = less CPU usage
+      USTREAMER_FORMAT: MJPEG          # MJPEG or YUYV
+      USTREAMER_ENCODER: HW            # HW or CPU (HW faster if supported)
+```
+
+**Common resolutions:**
+- `640x480` - Low quality, fast
+- `1280x720` - Good balance (recommended)
+- `1920x1080` - High quality, more CPU usage
+
+**Common framerates:**
+- `10` - Smooth enough for monitoring
+- `15` - Recommended
+- `30` - Very smooth but high CPU usage
+
+#### 4. Update Prind Containers
+
+**⚠️ IMPORTANT: This will restart containers - don't do during a print!**
+
+```bash
+cd ~/prind
+docker compose down
+docker compose up -d
+```
+
+**Or, if you just want to restart ustreamer without affecting the print:**
+```bash
+docker compose restart ustreamer
+```
+
+#### 5. Verify Camera Stream
+
+**Check ustreamer logs:**
+```bash
+docker logs prind-ustreamer-1
+```
+
+**Should see:**
+```
+-- Listening HTTP on [0.0.0.0]:8080
+-- Device: /dev/webcam
+-- Format: MJPEG
+-- Resolution: 1280x720
+```
+
+**Test stream in browser:**
+```
+http://<server-ip>:8080/stream
+```
+
+You should see your camera feed.
+
+#### 6. Configure Fluidd to Show Camera
+
+**In Fluidd web interface:**
+
+1. Click hamburger menu (☰) → **Settings**
+2. Go to **Cameras** section
+3. Click **+ Add Camera**
+4. Configure:
+   - **Name**: `Printer Camera` (or whatever you want)
+   - **URL**: `http://<server-ip>:8080/stream`
+   - **Type**: `MJPEG Stream`
+   - **Flip Horizontal**: ☐ (check if image is mirrored)
+   - **Flip Vertical**: ☐ (check if upside down)
+5. Click **Save**
+
+**For local access (same machine):**
+```
+URL: http://localhost:8080/stream
+```
+
+**For remote access:**
+```
+URL: http://<your-server-ip>:8080/stream
+```
+
+#### 7. Position Camera
+
+**Mounting tips:**
+- Mount above and slightly behind printer bed
+- Angle down at 30-45° to see nozzle and print
+- Keep lens clean (plastic dust accumulates fast!)
+- Avoid direct LED light glare into lens
+
+### Troubleshooting
+
+#### Camera Not Detected
+
+```bash
+# Check if device exists
+ls -la /dev/video*
+
+# Check permissions
+groups $USER
+# Should include 'video' group
+
+# If not, add user to video group
+sudo usermod -aG video $USER
+# Then log out and back in
+```
+
+#### Stream Not Working
+
+```bash
+# Check ustreamer is running
+docker ps | grep ustreamer
+
+# Check ustreamer logs for errors
+docker logs prind-ustreamer-1 --tail 50
+
+# Restart ustreamer only
+docker compose restart ustreamer
+```
+
+#### "Device or resource busy" Error
+
+Another program is using the camera:
+```bash
+# Find what's using it
+sudo lsof /dev/video0
+
+# Kill the process (replace PID)
+kill <PID>
+
+# Or restart ustreamer
+docker compose restart ustreamer
+```
+
+#### Low Framerate / Lag
+
+```yaml
+# In docker-compose.override.yaml, reduce quality:
+environment:
+  USTREAMER_RESOLUTION: 640x480   # Lower resolution
+  USTREAMER_FRAMERATE: 10         # Lower FPS
+  USTREAMER_ENCODER: HW           # Use hardware encoding if available
+```
+
+#### Camera Works But No Image in Fluidd
+
+- Check Fluidd camera URL matches: `http://<server-ip>:8080/stream`
+- Try accessing stream directly in browser first
+- Check browser console (F12) for CORS or connection errors
+- If accessing remotely, ensure port 8080 is not blocked by firewall
+
+### Advanced: Multiple Cameras
+
+**Edit `docker-compose.override.yaml`:**
+
+```yaml
+services:
+  ustreamer:
+    devices:
+      - /dev/video0:/dev/webcam0
+      - /dev/video1:/dev/webcam1
+    environment:
+      # Primary camera config...
+```
+
+Then configure Fluidd with multiple camera URLs:
+- Camera 1: `http://<server-ip>:8080/stream`
+- Camera 2: You'll need to run a second ustreamer instance on different port
+
+### Performance Tips
+
+1. **Lower resolution for faster streaming**: 640x480 is usually enough
+2. **Reduce framerate**: 10-15 FPS is fine for monitoring prints
+3. **Use hardware encoding** if your camera/server supports it
+4. **Disable camera during critical operations**: If print quality issues, try disabling stream temporarily
+
+### Camera Recommendations (Norwegian Market)
+
+Budget picks already listed in fire-safety doc:
+- **TP-Link Tapo C200**: 350-450 kr (Elkjøp, Komplett)
+- **Xiaomi Mi Home Camera**: 350-450 kr (Komplett)
+
+These work with Prind if you can access their RTSP stream, but simple USB webcams are easier.
+
+**USB Webcams (easier with Prind):**
+- **Logitech C270**: 300-400 kr (Komplett, Elkjøp)
+- **Logitech C920**: 600-800 kr (better quality)
+- **Generic USB camera**: 100-200 kr (AliExpress, works fine)
+
+---
+
 ## Deployment
 
 ### Deploy to Existing Installation
