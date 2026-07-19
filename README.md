@@ -820,13 +820,90 @@ SD Card → Printer MCU → Hardware
 
 ---
 
-## Resources
+## Recommended Resources
+
+### Official Documentation
 
 - **Klipper Documentation**: https://www.klipper3d.org/
-- **Fluidd**: https://docs.fluidd.xyz/
-- **Prind GitHub**: https://github.com/mkuf/prind
-- **KIAUH GitHub**: https://github.com/dw-0/kiauh
+  - **Config Reference**: https://www.klipper3d.org/Config_Reference.html - Complete reference for all config options
+  - **Pressure Advance Guide**: https://www.klipper3d.org/Pressure_Advance.html - Official calibration procedure
+  - **Resonance Compensation**: https://www.klipper3d.org/Resonance_Compensation.html - Input shaping details
+  - **G-Codes**: https://www.klipper3d.org/G-Codes.html - All available commands and macros
+  
+- **Klipper GitHub**: https://github.com/Klipper3d/klipper
+  - **Example Configs**: https://github.com/Klipper3d/klipper/tree/master/config
+  - Look for `printer-creality-ender3-v2-2020.cfg` for stock reference
+
+- **Fluidd Documentation**: https://docs.fluidd.xyz/
+- **Prind (Docker Setup)**: https://github.com/mkuf/prind
+- **KIAUH (Klipper Install Script)**: https://github.com/dw-0/kiauh
 - **FluiddPi Releases**: https://github.com/fluidd-core/FluiddPi/releases
+
+### Calibration & Tuning Guides (HIGHLY RECOMMENDED)
+
+- **Ellis' Print Tuning Guide**: https://ellis3dp.com/Print-Tuning-Guide/
+  - **⭐ BEST comprehensive tuning guide** - Start here!
+  - Covers pressure advance, flow rate, retraction, temperature
+  - Step-by-step with detailed pictures and explanations
+  - Voron-focused but applies to all Klipper printers
+  - **Specific sections to read**:
+    - Pressure Advance tuning
+    - Extrusion multiplier (flow) calibration
+    - Temperature tuning
+    
+- **Teaching Tech Calibration**: https://teachingtechyt.github.io/calibration.html
+  - Interactive calibration website
+  - Generates test models for download
+  - Great for E-steps, flow, temperature towers, retraction tests
+
+### Community Forums & Support
+
+- **Klipper Discourse Forum**: https://klipper.discourse.group/
+  - Official community forum - very helpful for technical questions
+  - **Search before posting** - many questions already answered
+  - Great for troubleshooting and advanced discussions
+  
+- **Reddit Communities**:
+  - **r/klippers**: https://reddit.com/r/klippers - Klipper-specific community
+  - **r/ender3v2**: https://reddit.com/r/ender3v2 - Ender 3 V2 specific (all firmware)
+  - Good for troubleshooting, upgrade recommendations, print quality discussions
+  
+- **Discord Servers**:
+  - **Klipper Discord**: https://discord.klipper3d.org/ - Real-time help and discussion
+  - **Voron Discord**: https://discord.gg/voron - Advanced Klipper users (very helpful even for non-Voron printers)
+
+### Norwegian Communities
+
+- **Facebook Groups**:
+  - "3D-printing Norge" - Norwegian 3D printing community
+  - Good for local supplier recommendations, finding used parts
+  - Share experiences with Norwegian retailers (Komplett, Proshop, etc.)
+
+### Config Examples & Macros
+
+- **Rootiest Zippy Config**: https://github.com/rootiest/zippy-klipper_config
+  - Large collection of well-documented macros
+  - Excellent START_PRINT, END_PRINT examples
+  - Many useful features to adapt for your setup
+  
+- **GitHub Search**: Search "ender 3 v2 klipper config"
+  - Many users share their complete configs
+  - Look for repos with similar hardware (mainboard version, extruder type)
+
+### YouTube Channels
+
+- **Teaching Tech** - Excellent calibration tutorials, clear explanations
+- **NERO 3D** - Klipper-specific tutorials, beginner-friendly
+- **Ellis (Ellis3dp)** - Advanced Klipper content, highly technical
+- **Made with Layers** - Voron/Klipper focused, high-quality content
+
+### What to Focus On First (For Your Setup)
+
+1. **Ellis' Pressure Advance Section** - You just set PA to 0.65, verify it's correct
+2. **Ellis' Extrusion Multiplier** - Calibrate flow rate for accurate extrusion
+3. **Teaching Tech Retraction Test** - Fine-tune your 6.5mm retraction setting
+4. **Temperature Tuning** - Find optimal temp for your specific PLA brand (currently 220°C)
+5. **Join Klipper Discourse** - For when you have specific questions
 
 ---
 
