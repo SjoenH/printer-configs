@@ -1050,6 +1050,180 @@ ACCEPT           # Move to next corner
 
 ---
 
+## Support Material Optimization
+
+### Why You're Getting Too Much Support
+
+**Common causes:**
+1. **Overhang threshold too conservative** (default 45°, try 50-55°)
+2. **Support Z-distance too small** (makes supports stick too much)
+3. **Auto-support generating everywhere** (use manual/paint-on instead)
+4. **Tree supports not enabled** (organic supports use less material)
+5. **Model orientation not optimized** (rotating model can eliminate supports)
+
+### Tips to Minimize Supports
+
+#### 1. Orient Your Model Better
+
+**Golden rule:** Minimize overhangs > 45°
+
+```
+BAD (needs lots of support):        GOOD (minimal/no support):
+     ___                                  ___________
+    /   \                                |           |
+   /     \                               |           |
+  /_______\                              |___________|
+  
+  Pyramid on point                      Pyramid on base
+```
+
+**In OrcaSlicer:**
+- Right-click model → **Place on face** (try different faces)
+- Use **Lay flat** to automatically find best orientation
+- Sometimes rotating 45° or 90° eliminates all supports
+
+#### 2. Adjust Overhang Threshold
+
+**OrcaSlicer:** 
+- **Support** tab → **Support overhang threshold**: `50°` or `55°` (default is usually 45°)
+- PLA can print up to 50-55° overhang without support if well-tuned
+- Test with a [overhang test model](https://www.thingiverse.com/thing:2975429) to find your limit
+
+#### 3. Use Tree Supports (Organic)
+
+**OrcaSlicer:**
+- **Support** → **Type**: `Tree (auto)` or `Tree (slim)`
+- Tree supports use **50-70% less material**
+- Easier to remove
+- Less contact with model = cleaner finish
+
+**Settings:**
+- **Branch angle**: 40-50° (higher = less supports, might fail)
+- **Branch distance**: 3-5mm
+- **Tip diameter**: 0.8-1.2mm (smaller = easier removal)
+
+#### 4. Paint-On Supports (Manual)
+
+Instead of auto-generating everywhere:
+
+**OrcaSlicer:**
+1. **Support** → **Type**: `Support` (not auto)
+2. Click **Paint-on supports** tool (paintbrush icon)
+3. Manually paint ONLY where you need support
+4. **Ctrl+Click** to remove painted areas (eraser mode)
+
+**Advantages:**
+- Only support critical overhangs
+- Leave small overhangs unsupported (they might bridge fine)
+- Much less material waste
+
+#### 5. Support Z-Gap (Make Supports Easier to Remove)
+
+**OrcaSlicer:**
+- **Support** → **Support-object Z gap**: `0.2mm` (increase from default 0.15mm)
+- Higher = easier removal, but less stable support
+- For PLA: 0.2-0.25mm is good balance
+
+#### 6. Support Interface Layers
+
+**OrcaSlicer:**
+- **Support** → **Support interface layers**: `2-3`
+- **Interface pattern**: `Rectilinear` or `Grid`
+- Creates a "roof" between support and model
+- Much cleaner surface when removed
+
+#### 7. Use Built-in Bridges (No Support Needed)
+
+PLA can bridge up to **20-30mm** if settings are right:
+
+**OrcaSlicer Bridge Settings:**
+- **Bridge flow**: `0.95` (slightly under-extrude for tight lines)
+- **Bridge speed**: `25-40 mm/s` (slower = better bridges)
+- **Bridge fan speed**: `100%` (cool filament fast)
+
+Test if your model's overhangs are actually bridges (supported on both ends).
+
+#### 8. Split Model to Avoid Supports
+
+If model has one problematic area:
+- Split model in CAD or slicer
+- Print parts separately in optimal orientation
+- Glue together after (super glue or epoxy)
+
+**In OrcaSlicer:**
+- Right-click model → **Split** → **Split to parts**
+
+### Support Material Settings Reference
+
+**Minimal support (risky but clean):**
+```
+Type: Tree (slim)
+Overhang threshold: 55°
+Z gap: 0.25mm
+Pattern: Grid
+Density: 10%
+Interface layers: 3
+```
+
+**Safe support (more material but reliable):**
+```
+Type: Tree (auto)
+Overhang threshold: 45°
+Z gap: 0.2mm
+Pattern: Grid
+Density: 15%
+Interface layers: 2
+```
+
+**Manual control (recommended):**
+```
+Type: Normal (not auto)
+Use Paint-on tool
+Z gap: 0.2mm
+Interface layers: 3
+Only paint critical areas
+```
+
+### Quick Checklist Before Slicing
+
+- [ ] **Rotate model** to minimize overhangs
+- [ ] **Check overhang angle** (50-55° often works without support)
+- [ ] **Try tree supports** instead of normal
+- [ ] **Use paint-on** for precise control
+- [ ] **Increase Z-gap** to 0.2-0.25mm for easier removal
+- [ ] **Enable interface layers** for cleaner surface
+- [ ] **Consider splitting** model if one area is problematic
+
+### Testing Your Printer's Limits
+
+Print these calibration models to find your limits:
+
+1. **Overhang test**: https://www.thingiverse.com/thing:2975429
+   - Find max angle without support (usually 50-55° for PLA)
+   
+2. **Bridging test**: https://www.thingiverse.com/thing:476845
+   - Find max bridge distance (usually 20-30mm for PLA)
+
+3. **Support torture test**: https://www.thingiverse.com/thing:2656594
+   - Test support removal difficulty with your settings
+
+### Example: Reducing Support by 80%
+
+**Before (auto-support):**
+- Support material: 15g
+- Print time: +2 hours
+- Hard to remove, damages surface
+
+**After (optimized):**
+- Rotate model 90°
+- Tree supports only on critical areas
+- Z-gap: 0.25mm
+- Support material: 3g
+- Print time: +20 minutes
+- Easy removal, clean surface
+
+---
+
 ## Backup & Version Control
 
 **Save configuration changes:**
