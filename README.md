@@ -1224,6 +1224,159 @@ Print these calibration models to find your limits:
 
 ---
 
+## Changing Default Support Settings in OrcaSlicer
+
+### Method 1: In the UI (Recommended)
+
+**Set better defaults for your SPEEED profile:**
+
+1. **Open OrcaSlicer**
+2. Select your **SPEEED** profile (top right dropdown)
+3. Click **Support** tab on the right panel
+4. Adjust these settings:
+
+**Recommended defaults:**
+```
+Support Type: Tree (auto)              ← Much less material
+Overhang threshold: 50°                ← PLA can handle this
+Support on build plate only: ON        ← Skip interior supports
+Tree branch angle: 45°                 ← Good balance
+Tree branch distance: 4mm              ← Spacing between branches
+```
+
+**For easier removal:**
+```
+Support-object Z gap: 0.20mm           ← Easier to remove
+Support-object XY gap: 0.60mm          ← Side clearance
+Interface layers: 3                    ← Cleaner surface
+Interface pattern: Rectilinear         ← Strong but easy removal
+```
+
+5. **Save to profile**:
+   - Click the **floppy disk icon** at the top
+   - Or: **File** → **Save Project**
+   - Settings are now your new defaults
+
+### Method 2: Edit Profile JSON Directly
+
+**Add to your SPEEED profile:**
+
+```bash
+# Backup first
+cp ~/.config/OrcaSlicer/user/default/process/SPEEED.json ~/.config/OrcaSlicer/user/default/process/SPEEED.json.backup
+
+# Edit profile
+nano ~/.config/OrcaSlicer/user/default/process/SPEEED.json
+```
+
+**Add these lines inside the JSON (after existing settings):**
+
+```json
+{
+    "from": "User",
+    "inherits": "0.20mm Standard @Creality Ender3V2",
+    "name": "SPEEED",
+    
+    // ... your existing speed/acceleration settings ...
+    
+    // Add these support settings:
+    "support_type": "tree(auto)",
+    "support_threshold_angle": "50",
+    "support_on_build_plate_only": "1",
+    "support_object_xy_distance": "0.6",
+    "support_top_z_distance": "0.2",
+    "support_bottom_z_distance": "0.2",
+    "support_interface_top_layers": "3",
+    "support_interface_bottom_layers": "2",
+    "support_interface_pattern": "rectilinear",
+    "support_interface_spacing": "0.2",
+    "support_base_pattern": "rectilinear",
+    "support_base_pattern_spacing": "2.5",
+    "tree_support_branch_angle": "45",
+    "tree_support_branch_distance": "4",
+    "tree_support_branch_diameter": "2",
+    "independent_support_layer_height": "0"
+}
+```
+
+**Restart OrcaSlicer** to load changes.
+
+### Method 3: Create a "Minimal Supports" Preset
+
+**Instead of changing SPEEED, create a new profile:**
+
+1. In OrcaSlicer, click **Process** dropdown (top right)
+2. Click **+ Add** or duplicate SPEEED
+3. Name it: `SPEEED - Minimal Supports`
+4. Adjust support settings as above
+5. Save
+
+**Now you have two options:**
+- `SPEEED` - Original settings
+- `SPEEED - Minimal Supports` - Tree supports, 50° threshold, easy removal
+
+### Verify Your Settings
+
+**After changing defaults, slice a test model:**
+
+1. Load a model with overhangs
+2. Click **Slice Plate**
+3. Check preview:
+   - **Layer view**: See support structure
+   - **Color by feature type**: Highlight supports
+   - **Info panel (right)**: Check support material weight
+
+**Compare before/after:**
+- Original: ~15g supports
+- Tree + 50° threshold: ~3-5g supports
+
+### Key Settings Explained
+
+| Setting | Default | Recommended | Effect |
+|---------|---------|-------------|--------|
+| **Support type** | Normal | Tree (auto) | 50-70% less material |
+| **Overhang threshold** | 45° | 50-55° | Less supports, PLA can handle it |
+| **Build plate only** | OFF | ON | No interior supports (faster removal) |
+| **Z gap** | 0.15mm | 0.20-0.25mm | Easier removal, cleaner surface |
+| **Interface layers** | 1 | 3 | Much cleaner bottom surface |
+| **Branch angle** | 40° | 45° | Balance between stability and material |
+
+### Backup Your Profile
+
+**Save to Git:**
+
+```bash
+cd ~/printer-configs
+
+# Create slicer-profiles directory
+mkdir -p slicer-profiles
+
+# Copy your profile
+cp ~/.config/OrcaSlicer/user/default/process/SPEEED.json slicer-profiles/
+
+# Commit
+git add slicer-profiles/
+git commit -m "Add SPEEED profile with optimized support settings"
+git push
+```
+
+**Restore later:**
+
+```bash
+cp ~/printer-configs/slicer-profiles/SPEEED.json ~/.config/OrcaSlicer/user/default/process/
+```
+
+### Per-Model Override (Don't Change Defaults)
+
+**If you just want to adjust one print without changing defaults:**
+
+1. Load model
+2. Adjust support settings in right panel
+3. Slice
+4. Settings only apply to current project, not saved to profile
+
+---
+
 ## Backup & Version Control
 
 **Save configuration changes:**
